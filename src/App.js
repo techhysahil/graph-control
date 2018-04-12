@@ -78,14 +78,15 @@ class App extends Component {
   }
 
   deleteSelectedGraph(e){
-    const id = this.state.selectedDeleteObj.id;
+    const objid = this.state.selectedDeleteObj.id;
     let newData = this.state.graphData.filter((obj,index) => {
-      return obj.id != id
+      return obj.id != objid
     })
     this.setState({
       graphData : newData,
       selectedDeleteObj : newData[0]
     },() => {
+      this.toggleDeleteModal();
       alert("Selected graph is deleted successfully");
     })
   }
@@ -96,7 +97,7 @@ class App extends Component {
     })
 
     this.setState({
-      selectedDeleteObj : newObj
+      selectedDeleteObj : newObj[0]
     })
   }
 
@@ -134,19 +135,20 @@ class App extends Component {
     this.setState({
       graphData : newGraphData
     },() => {
+      this.toggleEditModal();
       alert("changes are saved successfully");
     })
   }
 
   changeSelectedGraphObj(e){
     let newObj = this.state.graphData.filter((obj,index) => {
-      return index = e.target.selectedIndex
+      return index === e.target.selectedIndex
     })
     this.setState({
-      selectedGraphObj : newObj,
-      editSelectedGraphType : newObj.type,
-      editSelectedlayoutType : newObj.layout,
-      editSelectedTitle : newObj.title
+      selectedGraphObj : newObj[0],
+      editSelectedGraphType : newObj[0].type,
+      editSelectedlayoutType : newObj[0].layout,
+      editSelectedTitle : newObj[0].title
     })
   }
 
@@ -174,6 +176,7 @@ class App extends Component {
         graphData : [...this.state.graphData,obj],
         newGraphTitle : ""
       },() => {
+        this.toggleAddModal();
         alert("New graph added successfully");
       })
     }
