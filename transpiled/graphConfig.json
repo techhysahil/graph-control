@@ -1,0 +1,26 @@
+[
+  {
+    "id" : 1523544202222,
+    "type": "lineChart",
+    "layout": "halfwidth",
+    "title" : "LineChart - 1"
+  },
+  {
+    "id" : 1923578787222,
+    "type": "barChart",
+    "layout": "halfwidth",
+    "title" : "BarChart - 1"
+  },
+  {
+    "id" : 3408544202222,
+    "type": "polarChart",
+    "layout": "fullwidth",
+    "title" : "PolarChart - 1"
+  },
+  {
+    "id" : 8926754202222,
+    "type": "pieChart",
+    "layout": "fullwidth",
+    "title" : "PieChart - 1"
+  }
+]
