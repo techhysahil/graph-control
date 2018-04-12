@@ -46,7 +46,8 @@ class App extends Component {
       selectedGraphObj : graphData[0],
       editSelectedTitle : graphData[0].title,
       editSelectedGraphType : graphData[0].type,
-      editSelectedlayoutType : graphData[0].layout
+      editSelectedlayoutType : graphData[0].layout,
+      selectedDeleteObj : graphData[0]
 
     }
     this.toggleAddModal = this.toggleAddModal.bind(this);
@@ -67,10 +68,36 @@ class App extends Component {
     this.changeSelectedGraphType = this.changeSelectedGraphType.bind(this);
     this.changeSelectedGraphType = this.changeSelectedGraphType.bind(this);
     this.changeeditSelectedTitle = this.changeeditSelectedTitle.bind(this);
+
+    this.changeSelectedDeleteGraph = this.changeSelectedDeleteGraph.bind(this);
+    this.deleteSelectedGraph = this.deleteSelectedGraph.bind(this);
   }
 
   componentDidMount(){
 
+  }
+
+  deleteSelectedGraph(e){
+    const id = this.state.selectedDeleteObj.id;
+    let newData = this.state.graphData.filter((obj,index) => {
+      return obj.id != id
+    })
+    this.setState({
+      graphData : newData,
+      selectedDeleteObj : newData[0]
+    },() => {
+      alert("Selected graph is deleted successfully");
+    })
+  }
+
+  changeSelectedDeleteGraph(e){
+    let newObj = this.state.graphData.filter((obj,index) => {
+      return index === e.target.selectedIndex
+    })
+
+    this.setState({
+      selectedDeleteObj : newObj
+    })
   }
 
   changeeditSelectedTitle(e){
@@ -92,9 +119,7 @@ class App extends Component {
   }
 
   editGraph(){
-    let id = this.state.selectedGraphObj.id;
-
-    this.state.graphData.map((obj) => {
+    var newGraphData = this.state.graphData.map((obj) => {
       if(this.state.selectedGraphObj.id === obj.id){
         obj = Object.assign(obj,{
           type: this.state.editSelectedGraphType,
@@ -106,6 +131,11 @@ class App extends Component {
       return obj
     })
 
+    this.setState({
+      graphData : newGraphData
+    },() => {
+      alert("changes are saved successfully");
+    })
   }
 
   changeSelectedGraphObj(e){
@@ -143,6 +173,8 @@ class App extends Component {
       this.setState({
         graphData : [...this.state.graphData,obj],
         newGraphTitle : ""
+      },() => {
+        alert("New graph added successfully");
       })
     }
   }
@@ -231,6 +263,7 @@ class App extends Component {
           </div>
         </Modal>
 
+
         {/* Edit Graph Model */}
         <Modal show={this.state.showEditModel} onClose={this.toggleEditModal}>
           <div className="edit-graph-model model">
@@ -269,26 +302,26 @@ class App extends Component {
                   }
                 </select>
               </div>
-
               <div className="add-graph btn" onClick={this.editGraph}>Save Changes</div>
-
-
           </div>
         </Modal>
         
+
         {/* Delete Graph Model */}
         <Modal show={this.state.showDeleteModel} onClose={this.toggleDeleteModal}>
           <div className="delete-graph-model model">
             <div className="fieldset">
               <span className="label">Select Graph</span>
-              <select>
-                <option value="grapefruit">Pie Chart</option>
-                <option selected value="coconut">Line Chart</option>
-                <option value="mango">Donut Chart</option>
+              <select value={this.state.selectedDeleteObj.title} onChange={this.changeSelectedDeleteGraph}>
+                {
+                  this.state.graphData.map((obj) => {
+                    return <option key={obj.id} value={obj.title}>{obj.title}</option>
+                  })
+                }
               </select>
             </div>
 
-            <div className="add-graph btn">Delete Graph</div>
+            <div className="add-graph btn" onClick={this.deleteSelectedGraph}>Delete Graph</div>
           </div>
         </Modal>
       </div>
