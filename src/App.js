@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {Modal} from './component/model'
-import graphData from './graphConfig.json';
+// import graphData from './graphConfig.json';
 import './App.css';
+
+var graphData  = window.GRAPH_INTERFACE.data;
 
 class App extends Component {
   constructor(props){
@@ -10,7 +12,7 @@ class App extends Component {
       showAddModel : false,
       showEditModel : false,
       showDeleteModel : false,
-      graphData : window.GRAPH_INTERFACE.data,
+      graphData : graphData,
 
       newGraphTitle : "",
       chartTypes : [
@@ -66,7 +68,7 @@ class App extends Component {
 
     this.editGraph = this.editGraph.bind(this);
     this.changeSelectedGraphType = this.changeSelectedGraphType.bind(this);
-    this.changeSelectedGraphType = this.changeSelectedGraphType.bind(this);
+    this.changeSelectedGraphLayout = this.changeSelectedGraphLayout.bind(this);
     this.changeeditSelectedTitle = this.changeeditSelectedTitle.bind(this);
 
     this.changeSelectedDeleteGraph = this.changeSelectedDeleteGraph.bind(this);
@@ -82,6 +84,10 @@ class App extends Component {
     let newData = this.state.graphData.filter((obj,index) => {
       return obj.id != objid
     })
+    
+    const event = new CustomEvent('updateGraphData', { detail: newData });
+    window.dispatchEvent(event);
+
     this.setState({
       graphData : newData,
       selectedDeleteObj : newData[0]
@@ -107,7 +113,7 @@ class App extends Component {
     })
   }
 
-  changeSelectedGraphType(e){
+  changeSelectedGraphLayout(e){
     this.setState({
       editSelectedlayoutType : e.target.value
     })
@@ -131,6 +137,9 @@ class App extends Component {
       }
       return obj
     })
+
+    const event = new CustomEvent('updateGraphData', { detail: newGraphData });
+    window.dispatchEvent(event);
 
     this.setState({
       graphData : newGraphData
@@ -173,9 +182,9 @@ class App extends Component {
         title : this.state.newGraphTitle
       }
       
-      const event = new CustomEvent('addNewGraph', { detail: obj });
+      const event = new CustomEvent('updateGraphData', { detail: [...this.state.graphData,obj] });
       window.dispatchEvent(event);
-      
+
       this.setState({
         graphData : [...this.state.graphData,obj],
         newGraphTitle : ""
@@ -301,7 +310,7 @@ class App extends Component {
               </div>
               <div className="fieldset">
                 <span className="label">Layout</span>
-                <select value={this.state.editSelectedlayoutType} onChange={this.changeSelectedGraphType}>
+                <select value={this.state.editSelectedlayoutType} onChange={this.changeSelectedGraphLayout}>
                   {
                     this.state.layoutType.map((obj) => {
                       return <option value={obj.name}>{obj.name}</option>
