@@ -10,7 +10,7 @@ class App extends Component {
       showAddModel : false,
       showEditModel : false,
       showDeleteModel : false,
-      graphData : graphData,
+      graphData : window.GRAPH_INTERFACE.data,
 
       newGraphTitle : "",
       chartTypes : [
@@ -172,6 +172,10 @@ class App extends Component {
         layout: this.state.defaultLayout,
         title : this.state.newGraphTitle
       }
+      
+      const event = new CustomEvent('addNewGraph', { detail: obj });
+      window.dispatchEvent(event);
+      
       this.setState({
         graphData : [...this.state.graphData,obj],
         newGraphTitle : ""
