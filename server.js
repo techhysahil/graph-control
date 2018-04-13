@@ -7,6 +7,12 @@ const { renderToString } = require('react-dom/server');
 
 const server = express();
 
+server.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 server.get('/', (req, res) => {
   const htmlPath = path.resolve(__dirname, 'build', 'index.html');
 
